@@ -1,0 +1,12 @@
+[Unit]
+Description=Dota2 automation service X
+
+[Service]
+Type=simple
+User=:USER:
+Group=:USER:
+WorkingDirectory=:PATH:
+ExecStart=/usr/bin/python autoaccept.py
+
+[Install]
+WantedBy=multi-user.target

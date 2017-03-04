@@ -12,7 +12,7 @@ except ImportError:
   from gi.repository import GLib as glib
 
 def accept():
-  if os.getenv('D2_AUTOACCEPT', '1') == '1':
+  if os.getenv('D2_AUTOACCEPT', '1') != '1':
     return
 
   time.sleep(int(os.getenv('D2_AUTOACCEPTDELAY', 1)))
@@ -20,11 +20,13 @@ def accept():
   call(['xdotool', 'key', 'Return'])
 
 def notify():
+  if os.getenv('D2_NOTIFY', '1') != '1':
+    return
+
   actwindow = check_output(['xdotool', 'getwindowfocus', 'getwindowname']).decode('UTF-8').strip()
   if 'Dota' not in actwindow:
-    if os.getenv('D2_NOTIFY', '1') == '1':
-      dirname, _ = os.path.split(os.path.abspath(__file__))
-      call(['aplay', os.path.join(dirname, 'sfx/dota_matchmaking_ready.wav')])
+    dirname, _ = os.path.split(os.path.abspath(__file__))
+    call(['aplay', os.path.join(dirname, 'sfx/dota_matchmaking_ready.wav')])
 
 def message_filter(bus, message):
   if message.get_member() != 'Notify':
